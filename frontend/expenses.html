@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Penz | Expenses</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="expenses-page">
+    <nav class="glass-nav">
+        <div class="logo">X-Penz</div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="expenses.html">Expenses</a>
+            <a href="add-expense.html">Add Expense</a>
+        </div>
+    </nav>
+
+<main class="expenses-content">
+    <h1 class="xpenz-logo">X-PENZ</h1>
+    <h2>All Expenses</h2>
+
+<!-- Expenses Table -->
+<table id="expenses-table">
+    <thead>
+        <tr>
+            <th>Vendor</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Method</th>
+        </tr>
+    </thead>
+<tbody> <!-- Expenses --> </tbody>
+</table>
+</main>
+
+    <script>
+        // Fetch the expense data
+        fetch("https://w18bf3d4th.execute-api.us-east-1.amazonaws.com/prod/expenses", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+
+            // Parse body response
+            const expenses = data.expenses;
+            expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+            displayExpenses(expenses); 
+        })
+        .catch((error) => {
+            console.error("Error loading data:", error);
+        });
+
+        function displayExpenses(expenses) {
+            const tableBody = document.querySelector("#expenses-table tbody");
+            tableBody.innerHTML = ""; 
+            expenses.forEach((expense) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${expense.vendor}</td>
+                    <td>${expense.category}</td>
+                    <td>$${expense.amount.toFixed(2)}</td>
+                    <td>${expense.date}</td>
+                    <td>${expense.method}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+# Terraform 
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/.lambda_zips/
+
+# tfvars contains domain name - never committed
+terraform/terraform.tfvars
+
+# AWS credentials - NEVER committed
+.aws/
+credentials
+aws-exports.js
+*.pem
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+
+# Node 
+node_modules/
+npm-debug.log*
+
+#OS
+.DS_Store
+Thumbs.db
+
+#Editor
+.vscode/
+.idea/
+*.swp
+
+#Test receipt images 
+*.jpg
+*.jpeg
+*.png
+test-receipts/

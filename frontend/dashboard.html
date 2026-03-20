@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Penz | Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page">
+    <nav class="glass-nav">
+        <div class="logo">X-Penz</div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="expenses.html">Expenses</a>
+            <a href="add-expense.html">Add Expense</a>
+        </div>
+    </nav>
+    <main class="dashboard-content"></main>
+    <h1 class="xpenz-logo">X-PENZ</h1>
+        <p class="tagline">Your monthly expenses with one click</p>
+    
+<!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card">
+            <p class="summary-title">This Month</p>
+            <p class="summary-amount" id="total-spending">$0.00</p>
+        </div>
+        <div class="summary-card">
+            <p class="summary-title">Last Month</p>
+            <p class="summary-amount" id="last-month-spending">$0.00</p>
+        </div>
+        <div class="summary-card">
+            <p class="summary-title">Average</p>
+            <p class="summary-amount" id="summary-spent">$0.00</p>
+        </div>
+    </div>
+    
+<!-- Recent Expenses -->
+    <section class="recent-expenses">
+        <h2>Recent Expenses</h2>
+        <div class="expenses-list" id="expense-list"> </div>
+        </section>
+        
+</main>
+
+    <script>
+        // Fetch the expense data
+        fetch("https://w18bf3d4th.execute-api.us-east-1.amazonaws.com/prod/expenses", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+
+        // Parse JSON response
+        .then((response) => response.json())  
+        .then((data) => {
+            const expenses = data.expenses;
+            displayExpenses(expenses); 
+            calculateTotalSpending(expenses);
+            calculateLastMonthSpending(expenses);
+            calculateAvgSpending(expenses);
+        })
+        .catch((error) => {
+            console.error("Error loading data:", error);
+            document.getElementById("total-spending").innerText = "Error loading data";
+        });
+
+        function displayExpenses(expenses) {
+            const expenseList = document.getElementById("expense-list");
+            expenseList.innerHTML = ""; 
+            expenses.forEach((expense) => {
+                const expenseItem = document.createElement("div");
+                expenseItem.classList.add("expense-item");
+                expenseItem.innerHTML = `
+                    <div><strong>Vendor:</strong> ${expense.vendor}</div>
+                    <div><strong>Category:</strong> ${expense.category}</div>
+                    <div><strong>Amount:</strong> $${expense.amount.toFixed(2)}</div>
+                    <div><strong>Date:</strong> ${expense.date}</div>
+                    <div><strong>Method:</strong> ${expense.method}</div>
+                `;
+                expenseList.appendChild(expenseItem);
+            });
+        }
+
+// Get total spending for the month
+function calculateTotalSpending(expenses) {
+const now = new Date();
+const currentMonth = now.getMonth();
+const currentYear = now.getFullYear();
+
+const thisMonthTotal = expenses.reduce((sum, expense) => {
+    const expenseDate = new Date(expense.date);
+    return (expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear)
+        ? sum + expense.amount
+        : sum;
+    }, 0);
+
+    document.getElementById("total-spending").innerText = `$${thisMonthTotal.toFixed(2)}`;
+}
+
+//Get last month spending
+function calculateLastMonthSpending(expenses) {
+    const now = new Date();
+    let lastMonth = now.getMonth() - 1;
+    let year = now.getFullYear();
+
+    if (lastMonth < 0) {
+        lastMonth = 11;
+        year -= 1;
+    }
+
+    const lastMonthTotal = expenses.reduce((sum, expense) => {
+        const expenseDate = new Date(expense.date);
+        return (expenseDate.getMonth() === lastMonth && expenseDate.getFullYear() === year)
+            ? sum + expense.amount
+            : sum;
+    }, 0);
+
+    document.getElementById("last-month-spending").innerText = `$${lastMonthTotal.toFixed(2)}`;
+}
+
+//Get Avg Spending
+function calculateAvgSpending(expenses){
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const thisMonthExpenses = expenses.filter(expense => {
+    const expenseDate = new Date(expense.date);
+    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+});
+
+const total = thisMonthExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+const avg = thisMonthExpenses.length > 0 ? total / thisMonthExpenses.length : 0;
+
+document.getElementById("summary-spent").innerText = `$${avg.toFixed(2)}`;
+}
+</script>
+
+</body>
+</html>

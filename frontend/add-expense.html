@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense | X-Penz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="add-expense-page">
+    <nav class="glass-nav">
+        <div class="logo">X-Penz</div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="expenses.html">Expenses</a>
+            <a href="add-expense.html">Add Expense</a>
+        </div>
+    </nav>
+
+    <main class="add-expense-content">
+        <h1>   Add New Expense   </h1>
+        <div class="expense-options">
+<!-- Tabs  -->
+<div class="tab-buttons">
+    <button class="tab-button active" data-tab="manual">📝 Manual Entry</button>
+    <button class="tab-button" data-tab="image">📷 Upload Receipt</button>
+    <button class="tab-button" data-tab="voice">🎤 Voice Input</button>
+</div>
+<div class="tab-panels"></div>
+
+<!-- Manual Entry Form -->
+<div class="tab-panel active" id="manual">
+    <form id="manual-form" class="card-form">
+        <label>Date</label>
+        <input type="date" id="date" placeholder="YYYY-MM-DD" required />
+
+        <label>Amount</label>
+        <input type="float" id="amount" placeholder="$0.00" required />
+
+        <label>Vendor</label>
+        <input type="text" id="vendor" placeholder="Merchant name" required />
+
+        <label>Category</label>
+        <input type="text" id="category" placeholder="Category" required />
+
+        <button type="submit" class="primary-button">Save Expense</button>
+     </form>
+</div>
+
+<!-- Voice Input -->
+<div class="tab-panel" id="voice">
+    <div class="voice-box">
+        <p><strong>Record a voice expense</strong></p>
+        <button id="voice-record" class="voice-button">🎤 Record</button>
+        <div id="voice-status" class="status-box"></div>
+        <div class="voice-example">
+            <p>Examples:</p>
+            <ul>
+                <li>"I spent 25 dollars at Walmart for groceries"</li>
+                <li>"20 dollars at Amazon for books"</li>
+                <li>"Paid 15.50 at Starbucks for coffee"</li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Image Upload -->
+<div class="tab-panel" id="image">
+    <div class="upload-box">
+        <p><strong>Upload Receipt</strong></p>
+        <input type="file" id="image-input" accept="image/*">
+        <button id="upload-image" class="primary-button">Upload</button>
+        <p id="image-status"></p>
+    </div>
+</div>
+</main>
+
+<script src="add-expense.js"></script>
+</body>
+</html>
