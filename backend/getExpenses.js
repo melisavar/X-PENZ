@@ -1,5 +1,4 @@
 // Scans DynamoDB expense-table and returns all expenses as JSON
-// Node.js 20 — AWS SDK v3 is built into the runtime, no npm install needed
 const { DynamoDBClient, ScanCommand } = require("@aws-sdk/client-dynamodb");
 const { unmarshall } = require("@aws-sdk/util-dynamodb");
 
@@ -21,7 +20,7 @@ exports.handler = async () => {
         const exp = unmarshall(item);
         return {
           ...exp,
-          // DynamoDB Decimals come back as strings — convert to number for frontend .toFixed()
+          // DynamoDB Decimals come back as strings and convert to number for frontend
           amount: Number(exp.amount) || 0,
           total:  Number(exp.total)  || 0,
         };
