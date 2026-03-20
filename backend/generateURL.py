@@ -1,4 +1,4 @@
-# Returns a pre-signed S3 PUT URL so the browser can upload receipts directly
+# Returns a presigned S3 PUT URL so the browser can upload receipts directly
 import boto3
 import json
 import os
@@ -32,7 +32,7 @@ def lambda_handler(event, context):
         return {
             'statusCode': 200,
             'headers': {'Access-Control-Allow-Origin': '*'},
-            # Frontend (add-expense.js) reads data.uploadURL — keep this key name
+            # Frontend (add-expense.js) reads data.uploadURL
             'body': json.dumps({'uploadURL': upload_url})
         }
 
